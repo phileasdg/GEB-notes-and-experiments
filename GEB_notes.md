@@ -76,12 +76,6 @@ rule.4 <- function(string){
 
 
 ```r
-plot(c(1:100), rnorm(100))
-```
-
-![](GEB_notes_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
-
-```r
 rule.vect <- c(rule.1, rule.2, rule.3, rule.4)
 
 # find the applicable rules to a string

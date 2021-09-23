@@ -78,8 +78,6 @@ rule.4 <- function(string){
 ## Let's try to use Search to find the solution to this problem.
 
 ```{r}
-plot(c(1:100), rnorm(100))
-
 rule.vect <- c(rule.1, rule.2, rule.3, rule.4)
 
 # find the applicable rules to a string
