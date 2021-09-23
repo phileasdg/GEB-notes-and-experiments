@@ -174,7 +174,7 @@ pre code {
 <div id="the-mu-puzle-chapter-1-p.33" class="section level1">
 <h1>The MU-puzle (Chapter 1, p.33)</h1>
 <p>Here, we use a post-production system (created in the 1920s by American Logician Emil Post), a kind of formal system, to describe and solve a puzzle, the MU-puzzle.</p>
-<p>‘A formal system is an abstract structure used for inferring theorems from axioms according to a set of rules. These rules, which are used for carrying out the inference of theorems from axioms, are the logical calculus of the formal system. A formal system is essentially an “axiomatic system”.’ <a href="https://en.wikipedia.org/wiki/Formal_system">Formal system, Wikipedia</a></p>
+<p>‘A <strong>formal system</strong> is an abstract structure used for inferring theorems from <strong>axioms</strong> according to a set of <strong>rules.</strong> These rules, which are used for carrying out the inference of theorems from axioms, are the logical calculus of the formal system. A formal system is essentially an “axiomatic system”.’ <a href="https://en.wikipedia.org/wiki/Formal_system">Formal system, Wikipedia</a></p>
 <p>In this formal system, we start with a string, in this case “MI”, and the goal to change our string to “MU”. To do so, we have four rules at our disposal. Since the only characters allowed in this system are “M”, “I”, and “U”, we will call it the MIU system.</p>
 <div id="the-rules-of-the-game" class="section level2">
 <h2>The rules of the game</h2>
@@ -219,11 +219,16 @@ rule.4 &lt;- function(string){
   } 
   return(new.string)
 }</code></pre>
-<p>In trying to find solutions to this puzzle, we inevitably start applying rules to our starting string to create new strings. Within the formal structure of this puzzle, each string producible by the rules is a <strong>theorem</strong>. In formal systems, theorems are simply strings of symbols; rather than “proven”, they are simply “produced” according to certain rules.</p>
-<p>The problem of this puzzle can therefore be expressed as the question: “Is”MU&quot; a theorem of the MIU system?&quot;.</p>
+</div>
+<div id="useful-terminology" class="section level2">
+<h2>Useful terminology:</h2>
+<p><strong>Theorem</strong>: In trying to find solutions to this puzzle, we inevitably start applying rules to our starting string to create new strings. Within the formal structure of this puzzle, each string producible by the rules is a <strong>theorem</strong>. In formal systems, theorems are simply strings of symbols; rather than “proven”, they are simply “produced” according to certain rules. The problem of this puzzle can therefore be expressed as the question: “Is”MU&quot; a theorem of the MIU system?&quot;.</p>
+<p><strong>Axiom</strong>: “An axiom, postulate or assumption is a statement that is taken to be true, to serve as a premise or starting point for further reasoning and arguments.” <a href="https://en.wikipedia.org/wiki/Axiom">Axiom, wikipedia</a></p>
 </div>
 <div id="lets-try-to-use-search-to-find-the-solution-to-this-problem." class="section level2">
 <h2>Let’s try to use Search to find the solution to this problem.</h2>
+<pre class="r"><code>plot(c(1:100), rnorm(100))</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <pre class="r"><code>rule.vect &lt;- c(rule.1, rule.2, rule.3, rule.4)
 
 # find the applicable rules to a string
@@ -256,20 +261,21 @@ theorem.search &lt;- function(start, rules, depth = 5){
   
   # check which rules rules apply to the start string:
   applicable.rules &lt;- find.applicable.rules(tail(theorems, 1), rule.vect)
-  
   # apply the applicable rules to the start string and save results as vector of candidate theorems:
   new.candidate.theorems &lt;- apply.rules(tail(theorems, 1), rule.vect)
-  
+  print(paste(&quot;Candidates&quot;)); print(new.candidate.theorems)
+  print(paste(&quot;Theorems before appending:&quot;)); print(theorems)
   # for every candidate, check if it has already been discovered
   for(candidate in new.candidate.theorems){
     # if the candidate has not been discovered, add it to the theorems vector
     if(is.element(candidate, theorems) == FALSE){
       theorems &lt;- c(theorems, candidate)
       # if the depth parameter of the current function iteration is superior to zero, search new theorems from derivations 
-      if(depth &gt; 0){
-        theorem.search(candidate, rule.vect, depth = depth-1)
-      }
+      #if(depth &gt; 0){
+        #theorem.search(candidate, rule.vect, depth = depth-1)
+      #}
     }
+    print(paste(&quot;Theorems after appending:&quot;)); print(theorems)
   }
   return(theorems)
 }
@@ -277,76 +283,18 @@ theorem.search &lt;- function(start, rules, depth = 5){
 theorems &lt;- theorem.search(&quot;MI&quot;, rule.vect, 5)</code></pre>
 <pre><code>## [1] &quot;MII&quot;
 ## [1] &quot;MII&quot;
-## [1] &quot;MIUIU&quot;
-## [1] &quot;MIUIU&quot;
-## [1] &quot;MIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIUIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIUIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIU&quot;
-## [1] &quot;MIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIU&quot;
-## [1] &quot;MIIII&quot;
-## [1] &quot;MIIII&quot;
-## [1] &quot;MIIUIIU&quot;
-## [1] &quot;MIIUIIU&quot;
-## [1] &quot;MIIUIIUIIUIIU&quot;
-## [1] &quot;MIIUIIUIIUIIU&quot;
-## [1] &quot;MIIUIIUIIUIIUIIUIIUIIUIIU&quot;
-## [1] &quot;MIIUIIUIIUIIUIIUIIUIIUIIU&quot;
-## [1] &quot;MIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIU&quot;
-## [1] &quot;MIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIU&quot;
-## [1] &quot;MIIIIIIII&quot;
-## [1] &quot;MIIIIIIII&quot;
-## [1] &quot;MIIIIUIIIIU&quot;
-## [1] &quot;MIIIIUIIIIU&quot;
-## [1] &quot;MIIIIUIIIIUIIIIUIIIIU&quot;
-## [1] &quot;MIIIIUIIIIUIIIIUIIIIU&quot;
-## [1] &quot;MIIIIUIIIIUIIIIUIIIIUIIIIUIIIIUIIIIUIIIIU&quot;
-## [1] &quot;MIIIIUIIIIUIIIIUIIIIUIIIIUIIIIUIIIIUIIIIU&quot;
-## [1] &quot;MUIUUIUUIUUIU&quot;
-## [1] &quot;MUIUUIUUIUUIU&quot;
-## [1] &quot;MUIUUIU&quot;
-## [1] &quot;MUIUUIU&quot;
-## [1] &quot;MUIUUIUUIUUIU&quot;
-## [1] &quot;MUIUUIUUIUUIU&quot;
-## [1] &quot;MIIIIIIIIIIIIIIII&quot;
-## [1] &quot;MIIIIIIIIIIIIIIII&quot;
-## [1] &quot;MIIIIIIIIUIIIIIIIIU&quot;
-## [1] &quot;MIIIIIIIIUIIIIIIIIU&quot;
-## [1] &quot;MIIIIIIIIUIIIIIIIIUIIIIIIIIUIIIIIIIIU&quot;
-## [1] &quot;MIIIIIIIIUIIIIIIIIUIIIIIIIIUIIIIIIIIU&quot;
-## [1] &quot;MUUIIUUUIIU&quot;
-## [1] &quot;MUUIIUUUIIU&quot;
-## [1] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII&quot;
-## [1] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII&quot;
-## [1] &quot;MIIIIIIIIIIIIIIIIUIIIIIIIIIIIIIIIIU&quot;
-## [1] &quot;MIIIIIIIIIIIIIIIIUIIIIIIIIIIIIIIIIU&quot;
-## [1] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII&quot;
-## [1] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII&quot;
-## [1] &quot;MUUUUUIUUUUUI&quot;
-## [1] &quot;MUUUUUIUUUUUI&quot;
-## [1] &quot;MUUIIUUII&quot;
-## [1] &quot;MUUIIUUII&quot;
-## [1] &quot;MUUIIUUUIIU&quot;
-## [1] &quot;MUUIIUUUIIU&quot;
-## [1] &quot;MUUIIUUIIUUIIUUII&quot;
-## [1] &quot;MUUIIUUIIUUIIUUII&quot;
-## [1] &quot;MIIII&quot;
-## [1] &quot;MIIII&quot;
-## [1] &quot;MUIUI&quot;
-## [1] &quot;MUIUI&quot;
-## [1] &quot;MUIUUIU&quot;
-## [1] &quot;MUIUUIU&quot;
-## [1] &quot;MUIUUIUUIUUIU&quot;
-## [1] &quot;MUIUUIUUIUUIU&quot;
-## [1] &quot;MUIUIUIUI&quot;
-## [1] &quot;MUIUIUIUI&quot;
-## [1] &quot;MUIUIUUIUIU&quot;
-## [1] &quot;MUIUIUUIUIU&quot;
-## [1] &quot;MUIUIUIUIUIUIUIUI&quot;
-## [1] &quot;MUIUIUIUIUIUIUIUI&quot;</code></pre>
+## [1] &quot;Candidates&quot;
+## [1] &quot;MIU&quot; &quot;MII&quot; &quot;MI&quot;  &quot;MI&quot; 
+## [1] &quot;Theorems before appending:&quot;
+## [1] &quot;MI&quot;
+## [1] &quot;Theorems after appending:&quot;
+## [1] &quot;MI&quot;  &quot;MIU&quot;
+## [1] &quot;Theorems after appending:&quot;
+## [1] &quot;MI&quot;  &quot;MIU&quot; &quot;MII&quot;
+## [1] &quot;Theorems after appending:&quot;
+## [1] &quot;MI&quot;  &quot;MIU&quot; &quot;MII&quot;
+## [1] &quot;Theorems after appending:&quot;
+## [1] &quot;MI&quot;  &quot;MIU&quot; &quot;MII&quot;</code></pre>
 <pre class="r"><code># check theorems vector for duplicates
 as.logical(anyDuplicated(theorems))</code></pre>
 <pre><code>## [1] FALSE</code></pre>
