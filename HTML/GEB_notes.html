@@ -224,6 +224,9 @@ rule.4 &lt;- function(string){
 <h2>Useful terminology:</h2>
 <p><strong>Theorem</strong>: In trying to find solutions to this puzzle, we inevitably start applying rules to our starting string to create new strings. Within the formal structure of this puzzle, each string producible by the rules is a <strong>theorem</strong>. In formal systems, theorems are simply strings of symbols; rather than “proven”, they are simply “produced” according to certain rules. The problem of this puzzle can therefore be expressed as the question: “Is”MU&quot; a theorem of the MIU system?&quot;.</p>
 <p><strong>Axiom</strong>: “An axiom, postulate or assumption is a statement that is taken to be true, to serve as a premise or starting point for further reasoning and arguments.” <a href="https://en.wikipedia.org/wiki/Axiom">Axiom, wikipedia</a></p>
+<p><strong>Rules of production/rules of inference</strong>:</p>
+<p><strong>Derivation</strong>:</p>
+<p><strong>Decision procedures</strong>:</p>
 </div>
 <div id="lets-try-to-use-search-to-find-the-solution-to-this-problem." class="section level2">
 <h2>Let’s try to use Search to find the solution to this problem.</h2>
@@ -236,7 +239,7 @@ find.applicable.rules &lt;- function(string, rules){
   
   for(rule in rule.vect){
     if(rule(string) != string){
-      applicable.rules &lt;- c(applicable.rules, rule)
+      applicable.rules &lt;- append(applicable.rules, rule)
     }
   }
   return(applicable.rules)
@@ -246,7 +249,7 @@ find.applicable.rules &lt;- function(string, rules){
 apply.rules &lt;- function(string, rules){
   results &lt;- c()
   for(rule in rules){
-    results &lt;- c(results, rule(string))
+    results &lt;- append(results, rule(string))
   }
   return(results)
 }
@@ -255,51 +258,80 @@ apply.rules &lt;- function(string, rules){
 theorem.search &lt;- function(start, rules, depth = 5){
   
   rule.vect &lt;- rules
-  theorems &lt;-c(start)
+  theorems &lt;- c(start)
   
-  # check which rules rules apply to the start string:
-  applicable.rules &lt;- find.applicable.rules(tail(theorems, 1), rule.vect)
-  # apply the applicable rules to the start string and save results as vector of candidate theorems:
-  new.candidate.theorems &lt;- apply.rules(tail(theorems, 1), rule.vect)
-  print(paste(&quot;Candidates&quot;)); print(new.candidate.theorems)
-  print(paste(&quot;Theorems before appending:&quot;)); print(theorems)
-  # for every candidate, check if it has already been discovered
+  sink(nullfile()) # suppress output
+  applicable.rules &lt;- find.applicable.rules(start, rule.vect)
+  new.candidate.theorems &lt;- apply.rules(start, rule.vect)
+  sink() # end suppressing output
   for(candidate in new.candidate.theorems){
-    # if the candidate has not been discovered, add it to the theorems vector
     if(is.element(candidate, theorems) == FALSE){
-      theorems &lt;- c(theorems, candidate)
-      # if the depth parameter of the current function iteration is superior to zero, search new theorems from derivations 
-      #if(depth &gt; 0){
-        #theorem.search(candidate, rule.vect, depth = depth-1)
-      #}
+      theorems &lt;- append(theorems, candidate)
+      if(depth &gt; 0){
+        theorems.deeper &lt;- theorem.search(candidate, rule.vect, depth = depth-1)
+        for(element in theorems.deeper){
+          if(is.element(element, theorems) == FALSE){
+            theorems &lt;- append(theorems, element)
+          }
+        }
+      }
     }
-    print(paste(&quot;Theorems after appending:&quot;)); print(theorems)
   }
   return(theorems)
 }
 
-theorems &lt;- theorem.search(&quot;MI&quot;, rule.vect, 5)</code></pre>
-<pre><code>## [1] &quot;MII&quot;
-## [1] &quot;MII&quot;
-## [1] &quot;Candidates&quot;
-## [1] &quot;MIU&quot; &quot;MII&quot; &quot;MI&quot;  &quot;MI&quot; 
-## [1] &quot;Theorems before appending:&quot;
-## [1] &quot;MI&quot;
-## [1] &quot;Theorems after appending:&quot;
-## [1] &quot;MI&quot;  &quot;MIU&quot;
-## [1] &quot;Theorems after appending:&quot;
-## [1] &quot;MI&quot;  &quot;MIU&quot; &quot;MII&quot;
-## [1] &quot;Theorems after appending:&quot;
-## [1] &quot;MI&quot;  &quot;MIU&quot; &quot;MII&quot;
-## [1] &quot;Theorems after appending:&quot;
-## [1] &quot;MI&quot;  &quot;MIU&quot; &quot;MII&quot;</code></pre>
+theorems &lt;- theorem.search(&quot;MI&quot;, rule.vect, 5)
+theorems</code></pre>
+<pre><code>##  [1] &quot;MI&quot;                                                               
+##  [2] &quot;MIU&quot;                                                              
+##  [3] &quot;MIUIU&quot;                                                            
+##  [4] &quot;MIUIUIUIU&quot;                                                        
+##  [5] &quot;MIUIUIUIUIUIUIUIU&quot;                                                
+##  [6] &quot;MIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIU&quot;                                
+##  [7] &quot;MIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIUIU&quot;
+##  [8] &quot;MII&quot;                                                              
+##  [9] &quot;MIIU&quot;                                                             
+## [10] &quot;MIIUIIU&quot;                                                          
+## [11] &quot;MIIUIIUIIUIIU&quot;                                                    
+## [12] &quot;MIIUIIUIIUIIUIIUIIUIIUIIU&quot;                                        
+## [13] &quot;MIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIUIIU&quot;                
+## [14] &quot;MIIII&quot;                                                            
+## [15] &quot;MIIIIU&quot;                                                           
+## [16] &quot;MIIIIUIIIIU&quot;                                                      
+## [17] &quot;MIIIIUIIIIUIIIIUIIIIU&quot;                                            
+## [18] &quot;MIIIIUIIIIUIIIIUIIIIUIIIIUIIIIUIIIIUIIIIU&quot;                        
+## [19] &quot;MUIUUIUUIUUIU&quot;                                                    
+## [20] &quot;MUIUUIU&quot;                                                          
+## [21] &quot;MUIIU&quot;                                                            
+## [22] &quot;MUIU&quot;                                                             
+## [23] &quot;MIIIIIIII&quot;                                                        
+## [24] &quot;MIIIIIIIIU&quot;                                                       
+## [25] &quot;MIIIIIIIIUIIIIIIIIU&quot;                                              
+## [26] &quot;MIIIIIIIIUIIIIIIIIUIIIIIIIIUIIIIIIIIU&quot;                            
+## [27] &quot;MUUIIUUUIIU&quot;                                                      
+## [28] &quot;MUUIIU&quot;                                                           
+## [29] &quot;MIIIIIIIIIIIIIIII&quot;                                                
+## [30] &quot;MIIIIIIIIIIIIIIIIU&quot;                                               
+## [31] &quot;MIIIIIIIIIIIIIIIIUIIIIIIIIIIIIIIIIU&quot;                              
+## [32] &quot;MUUUUUIU&quot;                                                         
+## [33] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII&quot;                                
+## [34] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIU&quot;                               
+## [35] &quot;MIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII&quot;
+## [36] &quot;MUUUUUUUUUUII&quot;                                                    
+## [37] &quot;MUUUUUI&quot;                                                          
+## [38] &quot;MUUUUUIUUUUUI&quot;                                                    
+## [39] &quot;MUI&quot;                                                              
+## [40] &quot;MUUII&quot;                                                            
+## [41] &quot;MUUIIUUII&quot;                                                        
+## [42] &quot;MUUIIUUIIU&quot;                                                       
+## [43] &quot;MUUIIUUIIUUIIUUII&quot;</code></pre>
 <pre class="r"><code># check theorems vector for duplicates
 as.logical(anyDuplicated(theorems))</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code># check theorems vector for goal string
 is.element(&quot;MU&quot;, theorems)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<p>Using the theorem search function we can discover infinitely many theorems of the MIU system, but we have no way to know if we are getting closer to “MU”, and no way to steer the search towards it. To find MU, we may need to approach this problem differently.</p>
+<p>Using the theorem.search function, we can discover infinitely many theorems of the MIU system, but we have no way to know if we are getting closer to “MU”, and no way to steer the search towards it. To find MU, we may need to approach this problem differently.</p>
 </div>
 <div id="section" class="section level2">
 <h2></h2>
