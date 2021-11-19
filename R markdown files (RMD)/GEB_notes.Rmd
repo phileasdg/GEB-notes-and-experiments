@@ -41,7 +41,6 @@ rule.2 <- function(string){
   if(grepl("M", substr(string, 1, nchar(string)-1))){
     M.index <- grep("M", string)[1]
     new.string = paste(new.string, substr(new.string, M.index[1]+1, nchar(new.string)), sep = "")
-    print(new.string)
   }
   return(new.string)
 }
@@ -69,17 +68,17 @@ rule.4 <- function(string){
 
 ## Useful terminology:
 
-**Theorem**: In trying to find solutions to this puzzle, we inevitably start applying rules to our starting string to create new strings. Within the formal structure of this puzzle, each string producible by the rules is a **theorem**. In formal systems, theorems are simply strings of symbols; rather than "proven", they are simply "produced" according to certain rules. The problem of this puzzle can therefore be expressed as the question: "Is "MU" a theorem of the MIU system?".
+**Theorem**: In trying to find solutions to this puzzle, we inevitably start applying rules to our starting string to create new strings. Within the formal structure of this puzzle, each string producible by the rules is a **theorem**. In formal systems, theorems are simply strings of symbols; rather than "proven", they are simply "produced" according to certain rules. The problem of this puzzle can therefore be expressed as the question: "Is 'MU' a theorem of the MIU system?".
 
-**Axiom**: "An axiom, postulate or assumption is a statement that is taken to be true, to serve as a premise or starting point for further reasoning and arguments." [Axiom, wikipedia](https://en.wikipedia.org/wiki/Axiom)
+**Axiom**: "An axiom, postulate or assumption is a statement that is taken to be true, to serve as a premise or starting point for further reasoning and arguments." [Axiom, Wikipedia](https://en.wikipedia.org/wiki/Axiom) In this example, "MI" is an axiom of the MIU system. Hostadter refers to the "MI" axiom as a "free" theorem. 
 
-**Rules of production/rules of inference**:
+**Rules of production/rules of inference**: The rules of production or rules of inference are the rules of a system. Hofstadter refers to them as "symbol-shunting" rules. In our example, they are the rules listed under the **Rules of the game** section of this document. According to Wikipedia, "In the philosophy of logic, A rule of inference, inference rule or transformation rule is a logical form consisting of a function which takes premises, analyzes their syntax, and returns a conclusion (or conclusions)." [Rule of inference, Wikipedia](https://en.wikipedia.org/wiki/Rule_of_inference)
 
-**Derivation**:
+**Derivation**: Hofstadter writes "A derivation is an explicit, line-by-line demonstration of how to produce [a] theorem according to the rules of the formal system". Hofstadter suggests that, although the concept of derivation is modeled on the concept of proof, we should opt for the former to describe the process of discovering theorems because it sounds more natural. I personally find both terms to be appropriate descriptions for this process.
 
-**Decision procedures**:
+**Decision procedures**: A "test for theoremhood"; A function which given a proposed theorem, returns within a finite amount of time whether the theorem is true. 
 
-## Let's try to use Search to find the solution to this problem.
+## Let's try to use a brute force Search approach to find the solution to this problem
 
 ```{r}
 rule.vect <- c(rule.1, rule.2, rule.3, rule.4)
@@ -132,7 +131,7 @@ theorem.search <- function(start, rules, depth = 5){
   return(theorems)
 }
 
-theorems <- theorem.search("MI", rule.vect, 5)
+theorems <- theorem.search("MI", rule.vect, depth = 5)
 theorems
 
 # check theorems vector for duplicates
@@ -141,13 +140,42 @@ as.logical(anyDuplicated(theorems))
 is.element("MU", theorems)
 ```
 
-Using the theorem.search function, we can discover infinitely many theorems of the MIU system, but we have no way to know if we are getting closer to "MU", and no way to steer the search towards it. To find MU, we may need to approach this problem differently.
+Using the theorem.search function, we can discover infinitely many provable/derivable theorems of the MIU system, but we have no way to know if we are getting closer to "MU", and no way to steer the search towards it. If MU is not a theorem of the system, then we will never know because this approach does not find non-theorems. To find MU, we need to approach this problem differently.
 
-##
+## Thinking inside and outside the system
+
+Since we know that "MI" is a theorem of the MIU system, we can discover properties of the MIU system by observing the effects of the rules on "MI" and its derived theorems.
 
 ```{r}
-# let's think more abstractly by seeing which rules work with each other:
+# Let's take a look at the effects of all the rules on "MI" individually:
+MI.neighbours <- c(rule.1("MI"), rule.2("MI"), rule.3("MI"), rule.4("MI"))
+MI.neighbours
 
-start <- "MI"
+# Note that all newly derived theorems start with "M":
+startsWith(MI.neighbours, "M")
+```
+
+In fact, the rules of the MIU system all produce theorems which start with M, which proves that all theorems of the MIU system must star
+t with M. We know that all theorems of MIU must have the form: $Mxx$. 
+
+```{r}
+# let's mathematise how the rules affect the strings:
+
+rule.1("MI")
+rule.2("MI")
+rule.3("MI")
+rule.4("MI")
+
+# More generally, an arbitrarily given string x can be derived from MI by the above four rules if, and only if, x respects the three following properties:
+
+# x is only composed with one M and any number of I and U,
+# x begins with M, and
+# the number of I in x is not divisible by 3.
+
+proposed_theorem <- "MU"
+
+decision.procedure <- function(proposed_theorem){
+  
+}
 ```
 
